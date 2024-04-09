@@ -48,8 +48,9 @@ export default function ProductList() {
   const brands = useSelector(selectBrands);
   const categories = useSelector(selectCategories);
   const status = useSelector(selectProductListStatus)
+  const totalItems = useSelector(selectTotalItems);
 //console.log(products);
-  const totalItems =30;
+  //const totalItems =30;
   const filters = [
     {
       id: "brand",
@@ -91,7 +92,7 @@ export default function ProductList() {
 
   const handleSort = (e, option) => {
 
-    const sort = { _sort: option.sort};
+    const sort = { _sort: option.sort,_order: option.order};
     //console.log("sort"+sort);
     setSort(sort);
   };
@@ -102,7 +103,7 @@ export default function ProductList() {
 
   useEffect(() => {
 
-    const pagination = { _start: (page-1)*10,_end:page*10 };
+    const pagination = { _page: page,_limit:ITEMS_PER_PAGE };
     //console.log("hello"+pagination);
     dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }));
     //ToDo: server will filter Deleted product

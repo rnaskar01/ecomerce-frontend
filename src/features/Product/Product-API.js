@@ -69,12 +69,8 @@ export function fetchProductsByFilters(filter,sort,pagination) {
   // for(let key in pagination){
   //   queryString+=`${key}=${pagination[key]}&`
   // }
-   let count=0;
   for (let key in pagination) {
-    if(count==0)
     queryString += `${key}=${pagination[key]}&`;
-   else queryString+=`${key}=${pagination[key]}`;
-   count++;
     //console.log(queryString);
   }
   

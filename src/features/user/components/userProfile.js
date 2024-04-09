@@ -10,6 +10,8 @@ export default function UserProfile() {
   const [selectedEditIndex,setSelectedEditIndex]=useState(-1)
   const [showAddAddressForm,setShowAddAddressForm]=useState(false)
 
+  //console.log(user.addresses);
+
   // ToDO: we will add payment section when we work on backend
 
   const {
