@@ -14,12 +14,12 @@ import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { selectcurrentorder } from "../features/order/orderSlice";
 import {
-  selectLoggedInUser,
-  updateUserAsync,
+  selectLoggedInUser
 } from "../features/auth/authslice";
 import { createOrderAsync } from "../features/order/orderSlice";
 import { selectUserInfo } from "../features/user/userSlice";
 import { discountedPrice } from "../app/constant";
+import { updateUserAsync } from "../features/user/userSlice";
 function Checkout() {
   const [open, setOpen] = useState(true);
   const items = useSelector(selectItems);
@@ -64,7 +64,7 @@ function Checkout() {
       items,
       totalitem,
       totalAmount,
-      user,
+      user:user.id,
       paymentmethod,
       selectedAddress,
       status : 'pending' // other status can be delivered,received

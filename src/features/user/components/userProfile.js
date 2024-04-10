@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { selectLoggedInUser } from '../../auth/authslice';
-import { selectUserInfo, updateUserAsync } from '../userSlice';
+import { selectLoggedInuser } from '../../auth/authslice';
+import { selectUserInfo,    updateUserAsync } from '../userSlice';
 import { useForm } from 'react-hook-form';
 
 export default function UserProfile() {
   const dispatch = useDispatch();
-  const user = useSelector(selectUserInfo);
+  const userInfo = useSelector(selectUserInfo);
   const [selectedEditIndex,setSelectedEditIndex]=useState(-1)
   const [showAddAddressForm,setShowAddAddressForm]=useState(false)
 
@@ -23,15 +23,15 @@ export default function UserProfile() {
   } = useForm();
   
   const handleEdit = (addressUpdate, index)=>{
-    const newUser = {...user, addresses:[...user.addresses]} // for shallow copy issue
-    newUser.addresses.splice(index,1,addressUpdate);
-    dispatch(updateUserAsync(newUser));
+    const newuser = {...userInfo, addresses:[...userInfo.addresses]} // for shallow copy issue
+    newuser.addresses.splice(index,1,addressUpdate);
+    dispatch(updateUserAsync(newuser));
     setSelectedEditIndex(-1);
   }
 
   const handleEditForm = (index)=>{
     setSelectedEditIndex(index);
-    const address = user.addresses[index];
+    const address = userInfo.addresses[index];
     setValue('name', address.name);
     setValue('email', address.email);
     setValue('city', address.city);
@@ -44,14 +44,14 @@ export default function UserProfile() {
 
   }
   const handleRemove = (e,index)=>{
-    const newUser = {...user, addresses:[...user.addresses]} // for shallow copy issue
-    newUser.addresses.splice(index,1);
-    dispatch(updateUserAsync(newUser))
+    const newuser = {...userInfo, addresses:[...userInfo.addresses]} // for shallow copy issue
+    newuser.addresses.splice(index,1);
+    dispatch(updateUserAsync(newuser))
   }
 
   const handleAdd = (address) =>{
-    const newUser = {...user, addresses:[...user.addresses,address]} 
-    dispatch(updateUserAsync(newUser));
+    const newuser = {...userInfo, addresses:[...userInfo.addresses,address]} 
+    dispatch(updateUserAsync(newuser));
     setShowAddAddressForm(false);
   }
 
@@ -61,13 +61,13 @@ export default function UserProfile() {
 <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
 <h1 className="text-4xl my-5 font-bold tracking-tight text-gray-900">
-    Name : {user.name ? user.name: 'New User'}
+    Name : {userInfo.name ? userInfo.name: 'New user'}
 </h1>
 <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
-      email address : {user.email}
+      email address : {userInfo.email}
 </h3>
-{user.role==='admin' && <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
-      role : {user.role}
+{userInfo.role==='admin' && <h3 className="text-xl my-5 font-bold tracking-tight text-red-900">
+      role : {userInfo.role}
 </h3>}
 </div>
 
@@ -250,7 +250,7 @@ type="submit" className="rounded-md my-5 bg-green-600 px-3 py-2 text-sm font-sem
           </form> : null}
 
 <p className="mt-0.5 text-sm text-gray-500">Your Address : </p>
-{user.addresses.map((address,index)=>(
+{userInfo.addresses.map((address,index)=>(
 <div>
           {selectedEditIndex===index ? <form
               className="bg-white px-5 py-12 mt-12"
