@@ -1,10 +1,11 @@
 import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
-import { clearSelectedProduct, createProductAsync, fetchProductsByIdAsync, selectAllproducts, selectBrands, selectProductById, selectCategories, updateProductAsync } from '../../Product/Product-Slice';
+import { clearSelectedProduct, createProductAsync, fetchProductsByIdAsync, selectBrands, selectProductById, selectCategories, updateProductAsync } from '../../Product/Product-Slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Modal from '../../common/Modal';
+import { useAlert } from 'react-alert';
 function ProductForm() {
     const {
         register,
@@ -16,6 +17,7 @@ function ProductForm() {
     const categories = useSelector(selectCategories);
     const brands = useSelector(selectBrands);
     const dispatch = useDispatch();
+    const alert = useAlert();
     const params = useParams();
     const [openModal,setopenModal] = useState(null)
 
@@ -29,8 +31,9 @@ function ProductForm() {
     },[params.id,dispatch])
 
 
-    const SelectedProduct = useSelector(selectProductById)
+   // console.log(SelectedProduct);
 
+    const SelectedProduct = useSelector(selectProductById)
 
     useEffect(()=>{
       if(SelectedProduct && params.id){
@@ -78,10 +81,13 @@ function ProductForm() {
             product.id=params.id;
             product.rating=SelectedProduct.rating || 0;
             dispatch(updateProductAsync(product))
+
+            alert.success('Product Updated')
             reset();
 
           }else{
             dispatch(createProductAsync(product));
+            alert.success('Product Created')
             reset();
         // ToDo: on product succefully added clear the field and show a message
 
@@ -93,7 +99,7 @@ function ProductForm() {
             <h2 className="text-base font-semibold leading-7 text-gray-900">Add Product</h2>
    
             <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-              {SelectedProduct.deleted && <h2 className='text-red-500 sm:col-span-6'>This product is deleted</h2>}
+              {SelectedProduct && SelectedProduct.deleted && <h2 className='text-red-500 sm:col-span-6'>This product is deleted</h2>}
               <div className="sm:col-span-6">
                 <label htmlFor="title" className="block text-sm font-medium leading-6 text-gray-900">
                   Product Name
@@ -140,7 +146,9 @@ function ProductForm() {
                         required: "brand is required",
                       })}>
                     <option value="">--choose brand--</option>
-                    {brands.map((brand)=>(<option value={brand.value}>
+                    {brands.map((brand)=>(
+                    <option key={brand.value}
+                    value={brand.value}>
                         {brand.label}
                     </option>
                     ))}
@@ -158,7 +166,8 @@ function ProductForm() {
                         required: "category is required",
                       })}>
                     <option value="">--choose Category--</option>
-                    {categories.map((Category)=>(<option value={Category.value}>
+                    {categories.map((Category)=>(
+                    <option key={Category.value} value={Category.value}>
                         {Category.label}
                     </option>
                     ))}
@@ -383,7 +392,7 @@ function ProductForm() {
           </button>
         </div>
       </form>
-              <Modal
+             {SelectedProduct&&  <Modal
                 title={`Delete ${SelectedProduct.title}`}
                 message="Are you Sure ?"
                 dangerOption="Delete"
@@ -391,7 +400,7 @@ function ProductForm() {
                 dangerAction={handleDelete}
                 cancelAction={()=>setopenModal(null)}
                 showModal={openModal}
-                ></Modal>
+                ></Modal>}
       </>
      );
 }

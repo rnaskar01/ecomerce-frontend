@@ -93,21 +93,32 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin/Product-Form/edit/:id",
-    element: <ProtectedAdmin><AdminProductFormPage /></ProtectedAdmin>,
+    element: (<ProtectedAdmin><AdminProductFormPage /></ProtectedAdmin>),
   },
   {
     path: "/order-succefull/:id",
-    element: <OrderSuccessfullPage></OrderSuccessfullPage>,
+    element: (
+      <Protected>
+        <OrderSuccessfullPage></OrderSuccessfullPage>{' '}
+      </Protected>
+  ),
   },
   {
     path: "/orders",
-    element: <UserOrdersPage></UserOrdersPage>
-    ,
+    element: (
+      <Protected>
+      <UserOrdersPage></UserOrdersPage>{' '}
+
+      </Protected>
+  ),
   },
   {
     path: "/profile",
-    element: <UserProfilePage></UserProfilePage>
-    ,
+    element: (
+      <Protected>
+        <UserProfilePage></UserProfilePage>{' '}
+      </Protected>
+    ),
   },
   {
     path: "*",

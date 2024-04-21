@@ -6,7 +6,6 @@ import {
   StarIcon,
 } from "@heroicons/react/20/solid";
 import {
-  fetchAllproductsAsync,
   fetchBrandsAsync,
   fetchCategoriesAsync,
   fetchProductsByFiltersAsync,
@@ -390,7 +389,8 @@ function DesktopFilter({ handleFilter,filters }) {
                 <Disclosure.Panel className="pt-6">
                   <div className="space-y-4">
                     {section.options.map((option, optionIdx) => (
-                      <div key={option.value} className="flex items-center">
+                      <div key={option.value} 
+                      className="flex items-center">
                         <input
                           id={`filter-${section.id}-${optionIdx}`}
                           name={`${section.id}[]`}
@@ -435,7 +435,7 @@ function ProductGrid({ products,status }) {
             wrapperClass=""
             />
           ) : null}
-     <div className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
+     <div  className="mx-auto max-w-2xl px-4 py-0 sm:px-6 sm:py-0 lg:max-w-7xl lg:px-8">
           <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
           
             { products.map((product) => (

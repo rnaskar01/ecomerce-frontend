@@ -36,13 +36,9 @@ export function createOrder(order) {
     }
 
 
-    let count=0;
   for (let key in pagination) {
-    if(count==0)
     queryString += `${key}=${pagination[key]}&`;
-   else queryString+=`${key}=${pagination[key]}`;
-   count++;
-    console.log("query string"+queryString);
+
   }
   
  
@@ -51,8 +47,8 @@ export function createOrder(order) {
     // TODO: we will not hard-code server here
     const response = await fetch('http://localhost:8080/orders?'+queryString)
     const data = await response.json()
-    const totalItems = await response.headers.get('X-Total-Count')
-    resolve({data:{orders:data,totalItems:+totalItems}})
+    const totalOrders = await response.headers.get('X-Total-Count')
+    resolve({data:{orders:data,totalOrders: +totalOrders}})
   });
    }
   

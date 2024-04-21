@@ -251,7 +251,7 @@ type="submit" className="rounded-md my-5 bg-green-600 px-3 py-2 text-sm font-sem
 
 <p className="mt-0.5 text-sm text-gray-500">Your Address : </p>
 {userInfo.addresses.map((address,index)=>(
-<div>
+<div key={index}>
           {selectedEditIndex===index ? <form
               className="bg-white px-5 py-12 mt-12"
               noValidate

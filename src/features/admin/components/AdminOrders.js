@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ITEMS_PER_PAGE } from "../../../app/constant";
+import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constant";
 import { useDispatch, useSelector } from "react-redux";
 import {
   UpdateOrderAsync,
@@ -17,9 +17,9 @@ function AdminOrders() {
   const orders = useSelector(selectAllOrders);
   const [sort, setSort] = useState({});
 
-  const totalOrders = 30;
+  const totalOrders = useSelector(selectTotalOrders);
   const [editableOrderId, setEditableOrderId] = useState(-1);
-  // console.log("orders"+orders);
+   //console.log("orders"+totalOrders);
 
   // useEffect(()=>{
   //   dispatch(fetchAllOrdersAsync())
@@ -30,15 +30,15 @@ function AdminOrders() {
     setPage(page);
   };
   const handleSort = (sortOption) => {
-    const sort = { _sort: sortOption.sort };
-    console.log(sort);
+  
+    const sort = { _sort: sortOption.sort, _order: sortOption.order };
     setSort(sort);
   };
 
   useEffect(() => {
-    const pagination = { _start: (page - 1) * 10, _end: page * 10 };
+    const pagination = { _page: page,_limit:ITEMS_PER_PAGE };
     dispatch(fetchAllOrdersAsync({ sort, pagination }));
-  }, [dispatch, page]);
+  }, [dispatch, page,sort]);
 
   const handleEdit = (order) => {
     setEditableOrderId(order.id);
@@ -80,14 +80,20 @@ function AdminOrders() {
                   <tr className="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                     <th
                       className="py-3 px-6 text-left cursor-pointer"
-                      onClick={(e) => handleSort({ sort: "id" })}
+                      onClick={(e) => handleSort({ sort: "id",
+                      order: sort?._order === 'asc' ? 'desc' : 'asc',
+                     })}
                     >
                       Order Id {" "}
-                      {sort._sort==='id'  ? <ArrowUpIcon className="w-4 h-4 inline"></ArrowUpIcon> : <ArrowDownIcon className="w-4 h-4 inline"></ArrowDownIcon>}
+                      {sort._sort==='id'&&
+                      (sort._order === 'asc'  ? (<ArrowUpIcon className="w-4 h-4 inline"></ArrowUpIcon>) : (<ArrowDownIcon className="w-4 h-4 inline"></ArrowDownIcon>))}
                     </th>
                     <th className="py-3 px-6 text-left">Items</th>
-                    <th className="py-3 px-6 text-center cursor-pointer" onClick={(e) => handleSort({ sort: "totalAmount" })}>Total Amount
-                    {sort._sort==='totalAmount'  ? <ArrowUpIcon className="w-4 h-4 inline"></ArrowUpIcon> : <ArrowDownIcon className="w-4 h-4 inline"></ArrowDownIcon>}
+                    <th className="py-3 px-6 text-center cursor-pointer" onClick={(e) => handleSort({ sort: "totalAmount" ,
+                   order: sort?._order === 'asc' ? 'desc' : 'asc',
+                   })}>Total Amount
+                    {sort._sort==='totalAmount' &&
+                      (sort._order === 'asc' ? (  <ArrowUpIcon className="w-4 h-4 inline"></ArrowUpIcon>) : (<ArrowDownIcon className="w-4 h-4 inline"></ArrowDownIcon>))}
 
                     </th>
                     <th className="py-3 px-6 text-center">Shipping Address</th>
@@ -97,7 +103,7 @@ function AdminOrders() {
                 </thead>
                 <tbody className="text-gray-600 text-sm font-light">
                   {orders.map((order) => (
-                    <tr className="border-b border-gray-200 hover:bg-gray-100">
+                    <tr key={order.id} className="border-b border-gray-200 hover:bg-gray-100">
                       <td className="py-3 px-6 text-left whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="mr-2"></div>
@@ -105,15 +111,19 @@ function AdminOrders() {
                         </div>
                       </td>
                       <td className="py-3 px-6 text-left">
-                        {order.items.map((item) => (
-                          <div className="flex items-center">
+                        {order.items.map((item,index) => (
+                          <div key={index} className="flex items-center">
                             <div className="mr-2">
                               <img
                                 className="w-6 h-6 rounded-full"
-                                src={item.thumbnail}
+                                src={item.product.thumbnail}
+                                alt={item.product.title}
                               />
                             </div>
-                            <span>{item.title}</span>
+                            <span>
+                              {item.product.title}-#{item.quantity}-
+                              {discountedPrice(item.product)}
+                              </span>
                           </div>
                         ))}
                       </td>
