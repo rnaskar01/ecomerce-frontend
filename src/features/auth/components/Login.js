@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  checkUserAsync,
+  loginUserAsync,
   increment,
   incrementAsync,
   selectCount,
@@ -41,7 +41,7 @@ export default function Login() {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form noValidate
                 onSubmit={handleSubmit((data) => {
-                  dispatch(checkUserAsync({email:data.email,password:data.password}))
+                  dispatch(loginUserAsync({email:data.email,password:data.password}))
                   
                 })}
            className="space-y-6" action="#" method="POST">
@@ -94,7 +94,7 @@ export default function Login() {
                   )}
               </div>
               {error && (
-                    <p className="text-red-500">{error.message}</p>
+                    <p className="text-red-500">{error || error.message}</p>
                   )}
             </div>
 

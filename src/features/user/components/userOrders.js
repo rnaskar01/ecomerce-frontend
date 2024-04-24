@@ -1,22 +1,23 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectLoggedInuser } from '../../auth/authslice';
-import {  selectUserInfo, selectuser, selectUserOrders, fetchLoggedInUserOrderAsync } from '../userSlice';
+import {  selectUserInfo, selectuser, selectUserOrders, fetchLoggedInUserOrderAsync, selectUserInfoStatus } from '../userSlice';
 import { discountedPrice } from '../../../app/constant';
+import { RevolvingDot } from 'react-loader-spinner';
 
 export default function UserOrders() {
   const dispatch = useDispatch();
-  const userInfo = useSelector(selectUserInfo);
   const orders = useSelector(selectUserOrders);
+  const status = useSelector(selectUserInfoStatus);
   //console.log(user.id);
   useEffect(()=>{
     //let orderId = user.id;
-    dispatch(fetchLoggedInUserOrderAsync(userInfo.id));
-  },[]);
+    dispatch(fetchLoggedInUserOrderAsync());
+  },[dispatch]);
 
   return (
     <div>
-     { orders.map((order)=>(
+     {orders && orders.map((order)=>(
       <div>
 <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">
 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
@@ -105,6 +106,18 @@ export default function UserOrders() {
 </div>
 </div>
 ))}
+      {status === 'loading' ? (
+            <RevolvingDot
+            position="center" 
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="revolving-dot-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            />
+          ) : null}
 </div>
   );
 }
