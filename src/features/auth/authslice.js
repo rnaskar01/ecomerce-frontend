@@ -5,7 +5,8 @@ import { checkUser,signOut } from "./authApi";
 const initialState = {
   loggedInUserToken:null,
   status: "idle",
-  error:null
+  error:null,
+  userChecked: false
 };
 
 export const createUserAsync = createAsyncThunk(
@@ -93,12 +94,19 @@ export const authSlice = createSlice({
       .addCase(checkAuthAsync.fulfilled, (state, action) => {
         state.status = "idle";
         state.loggedInUserToken = action.payload;
+        state.userChecked=true;
+      })
+      .addCase(checkAuthAsync.rejected, (state, action) => {
+        state.status = "idle";
+        state.userChecked=true;
       });
   },
 });
 
 export const selectLoggedInUser = (state)=> state.auth.loggedInUserToken;
 export const selectError = (state)=> state.auth.error;
+export const selectUserChecked = (state)=> state.auth.userChecked;
+
 
 export const { increment } = authSlice.actions;
 

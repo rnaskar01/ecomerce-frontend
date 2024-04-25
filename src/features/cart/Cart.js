@@ -6,7 +6,8 @@ import {
   selectCount,
   selectItems,
   updateCartAsync,
-  deleteItemFromcartAsync
+  deleteItemFromcartAsync,
+  selectCartLoaded
 } from './CartSlice';
 import { Dialog, Transition } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
@@ -21,6 +22,7 @@ import Modal from '../common/Modal';
 export default function Cart() {
   const [open, setOpen] = useState(true)
   const items = useSelector(selectItems);
+  const cartLoaded = useSelector(selectCartLoaded);
   const dispatch = useDispatch();
   const [openModal,setopenModal] = useState(null)
 
@@ -37,7 +39,7 @@ const handleRemove = (e,id)=>{
 
   return (
     <>
-    {!items.length && <Navigate to= '/' replace={true}></Navigate>}
+    {!items.length && cartLoaded && <Navigate to= '/' replace={true}></Navigate>}
 
 
     <div className="mx-auto mt-12 bg-white max-w-7xl px-4 sm:px-6 lg:px-8">

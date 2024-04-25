@@ -13,9 +13,7 @@ import {
 import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { selectcurrentorder } from "../features/order/orderSlice";
-import {
-  selectLoggedInUser
-} from "../features/auth/authslice";
+import { selectLoggedInUser } from "../features/auth/authslice";
 import { createOrderAsync } from "../features/order/orderSlice";
 import { selectUserInfo } from "../features/user/userSlice";
 import { discountedPrice } from "../app/constant";
@@ -32,7 +30,7 @@ function Checkout() {
   } = useForm();
 
   const user = useSelector(selectUserInfo);
-  const currentorder = useSelector(selectcurrentorder)
+  const currentorder = useSelector(selectcurrentorder);
   const totalAmount = items.reduce(
     (amount, item) => discountedPrice(item.product) * item.quantity + amount,
     0
@@ -42,7 +40,7 @@ function Checkout() {
   const [paymentmethod, setpaymentmethod] = useState(null);
 
   const handleQuantity = (e, item) => {
-    dispatch(updateCartAsync({ id:item.id, quantity: +e.target.value }));
+    dispatch(updateCartAsync({ id: item.id, quantity: +e.target.value }));
   };
 
   const handleRemove = (e, id) => {
@@ -64,10 +62,10 @@ function Checkout() {
       items,
       totalitem,
       totalAmount,
-      user:user.id,
+      user: user.id,
       paymentmethod,
       selectedAddress,
-      status : 'pending' // other status can be delivered,received
+      status: "pending", // other status can be delivered,received
     };
     dispatch(createOrderAsync(order));
     //ToDo: Redirect to the Order Success page
@@ -77,13 +75,25 @@ function Checkout() {
   return (
     <>
       {!items.length && <Navigate to="/" replace={true}></Navigate>}
-      {currentorder && <Navigate to={`/order-succefull/${currentorder.id}`} replace={true}></Navigate>}
+      {currentorder && currentorder.paymentmethod==='Cash' && (
+        <Navigate
+          to={`/order-successfull/${currentorder.id}`}
+          replace={true}
+        ></Navigate>
+      )}
+
+{currentorder && currentorder.paymentmethod==='Card' && (
+        <Navigate
+          to={`/stripe-checkout/`}
+          replace={true}
+        ></Navigate>
+      )}
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
             {/*This form is for address*/}
-          <form
+            <form
               className="bg-white px-5 py-12 mt-12"
               noValidate
               onSubmit={handleSubmit((data) => {
@@ -351,7 +361,7 @@ function Checkout() {
                   </div>
                 </div>
               </div>
-          </form>
+            </form>
           </div>
           {/** Second Span */}
           <div className="lg:col-span-2">
@@ -377,7 +387,9 @@ function Checkout() {
                           <div>
                             <div className="flex justify-between text-base font-medium text-gray-900">
                               <h3>
-                                <a href={item.product.id}>{item.product.title}</a>
+                                <a href={item.product.id}>
+                                  {item.product.title}
+                                </a>
                               </h3>
                               <p className="ml-4">₹ {discountedPrice(item)}</p>
                             </div>
