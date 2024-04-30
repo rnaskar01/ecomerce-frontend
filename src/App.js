@@ -32,7 +32,6 @@ import AdminProductFormPage from './Pages/AdminProductFormPage';
 import AdminOrdersPage from './Pages/AdminOrdersPage';
 import { positions, Provider } from "react-alert";
 import AlertTemplate from "react-alert-template-basic";
-import StripeCheckout from './Pages/StripeCheckout';
 
 const options = {
   timeout: 5000,
@@ -104,14 +103,14 @@ const router = createBrowserRouter([
       </Protected>
   ),
   },
-  {
-    path: "/stripe-checkout/",
-    element: (
-      <Protected>
-        <StripeCheckout></StripeCheckout>
-      </Protected>
-  ),
-  },
+  // {
+  //   path: "/stripe-checkout/",
+  //   element: (
+  //     <Protected>
+  //       <StripeCheckout></StripeCheckout>
+  //     </Protected>
+  // ),
+  // },
   {
     path: "/orders",
     element: (

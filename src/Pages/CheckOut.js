@@ -63,6 +63,7 @@ function Checkout() {
       totalitem,
       totalAmount,
       user: user.id,
+      name:user.addresses.name,
       paymentmethod,
       selectedAddress,
       status: "pending", // other status can be delivered,received
@@ -82,12 +83,12 @@ function Checkout() {
         ></Navigate>
       )}
 
-{currentorder && currentorder.paymentmethod==='Card' && (
+{/* {currentorder && currentorder.paymentmethod==='Card' && (
         <Navigate
           to={`/stripe-checkout/`}
           replace={true}
         ></Navigate>
-      )}
+      )} */}
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
@@ -339,7 +340,7 @@ function Checkout() {
                             Cash
                           </label>
                         </div>
-                        <div className="flex items-center gap-x-3">
+                        {/* <div className="flex items-center gap-x-3">
                           <input
                             onChange={handlePayment}
                             id="Card"
@@ -355,7 +356,7 @@ function Checkout() {
                           >
                             Card Payment
                           </label>
-                        </div>
+                        </div> */}
                       </div>
                     </fieldset>
                   </div>
@@ -391,7 +392,7 @@ function Checkout() {
                                   {item.product.title}
                                 </a>
                               </h3>
-                              <p className="ml-4">₹ {discountedPrice(item)}</p>
+                              <p className="ml-4">₹ {discountedPrice(item.product)}</p>
                             </div>
                             <p className="mt-1 text-sm text-gray-500">
                               {item.product.brand}
