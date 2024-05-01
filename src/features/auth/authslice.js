@@ -1,12 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { createUser, loginUser,checkAuth } from "./authApi";
+import { createUser, loginUser,checkAuth, resetPasswordRequest } from "./authApi";
 import { checkUser,signOut } from "./authApi";
 
 const initialState = {
   loggedInUserToken:null,
   status: "idle",
   error:null,
-  userChecked: false
+  userChecked: false,
+  mailsent: false
 };
 
 export const createUserAsync = createAsyncThunk(
@@ -56,6 +57,19 @@ export const checkAuthAsync= createAsyncThunk(
 );
 
 
+export const resetPasswordRequestAsync= createAsyncThunk(
+  "user/resetPasswordRequest",
+  async (email) => {
+    try {
+      const response = await resetPasswordRequest(email);
+      return response.data
+    }catch(error){
+      console.log(error);
+    }
+   
+  }
+);
+
 export const authSlice = createSlice({
   name: "user",
   initialState,
@@ -99,6 +113,13 @@ export const authSlice = createSlice({
       .addCase(checkAuthAsync.rejected, (state, action) => {
         state.status = "idle";
         state.userChecked=true;
+      })
+      .addCase(resetPasswordRequestAsync.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(resetPasswordRequestAsync.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.mailsent=true;
       });
   },
 });
@@ -106,6 +127,8 @@ export const authSlice = createSlice({
 export const selectLoggedInUser = (state)=> state.auth.loggedInUserToken;
 export const selectError = (state)=> state.auth.error;
 export const selectUserChecked = (state)=> state.auth.userChecked;
+export const selectMailSent = (state)=> state.auth.mailsent;
+
 
 
 export const { increment } = authSlice.actions;
