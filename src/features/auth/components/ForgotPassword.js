@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import useDispatch, { useSelector } from 'react-redux'
+import  {useDispatch, useSelector } from 'react-redux'
 import { useForm, SubmitHandler } from "react-hook-form";
 import { resetPasswordRequestAsync, selectMailSent } from '../authslice';
 
@@ -32,7 +32,7 @@ export default function ForgotPassword() {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form noValidate
                 onSubmit={handleSubmit((data) => {
-                    console.log(data);
+                    //console.log(data.ema);
                     dispatch(resetPasswordRequestAsync(data.email))
                 })}
            className="space-y-6" action="#" method="POST">
