@@ -6,6 +6,13 @@ import { resetPasswordAsync,  selectPasswordReset } from '../authslice';
 
 export default function ResetPassword() {
   const passwordReset = useSelector(selectPasswordReset)
+  const query = new URLSearchParams(window.location.search);
+  const token = query.get('token')
+  const email = query.get('email')
+
+
+
+
   const dispatch = useDispatch();
   const {
     register,
@@ -13,11 +20,10 @@ export default function ResetPassword() {
     formState: { errors },
   } = useForm();
 
-
+console.log(email,token);
   return (
-    <div>
       <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+     {(email && token) ? <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             className="mx-auto h-10 w-auto"
@@ -33,7 +39,7 @@ export default function ResetPassword() {
           <form noValidate
                 onSubmit={handleSubmit((data) => {
                     //console.log(data.email);
-                    dispatch(resetPasswordAsync(data.email))
+                    dispatch(resetPasswordAsync({email,token, password:data.password}))
                 })}
            className="space-y-6" action="#" method="POST">
                        <div>
@@ -119,8 +125,7 @@ export default function ResetPassword() {
             </Link>
           </p>
         </div>
-      </div>
+      </div> : <p>Link Incorrected</p>}
     </>
-    </div>
   );
 }

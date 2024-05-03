@@ -85,17 +85,15 @@ export function signOut(userId) {
   }
 
 
-  export function resetPassword() {
+  export function resetPassword(data) {
     return new Promise(async(resolve,reject) =>{
       try {
         const response = await fetch('http://localhost:8080/auth/reset-password',{
           method:'POST',
-          body: JSON.stringify({}),
+          body: JSON.stringify(data),
           headers:{'content-type':'application/json'}
         });
         if(response.ok){
-          // console.log("its working");
-
           const data = await response.json()
           resolve({data})
         }else{
