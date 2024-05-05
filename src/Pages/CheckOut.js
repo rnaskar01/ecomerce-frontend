@@ -35,7 +35,7 @@ function Checkout() {
     (amount, item) => discountedPrice(item.product) * item.quantity + amount,
     0
   );
-  const totalitem = items.reduce((total, item) => item.quantity + total, 0);
+  const totalItems = items.reduce((total, item) => item.quantity + total, 0);
   const [selectedAddress, setselectedAddress] = useState(null);
   const [paymentmethod, setpaymentmethod] = useState(null);
 
@@ -60,7 +60,7 @@ function Checkout() {
   const handleOrder = (e) => {
     const order = {
       items,
-      totalitem,
+      totalItems,
       totalAmount,
       user: user.id,
       name:user.addresses.name,
@@ -442,7 +442,7 @@ function Checkout() {
 
                 <div className="flex justify-between my-2 text-base font-medium text-gray-900">
                   <p>Total item in cart</p>
-                  <p>{totalitem} item</p>
+                  <p>{totalItems} item</p>
                 </div>
                 <p className="mt-0.5 text-sm text-gray-500">
                   Shipping and taxes calculated at checkout.

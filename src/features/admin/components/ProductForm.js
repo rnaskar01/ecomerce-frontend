@@ -21,6 +21,27 @@ function ProductForm() {
     const params = useParams();
     const [openModal,setopenModal] = useState(null)
 
+
+
+    const colors =  [
+      { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400', id:'white' },
+      { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400', id:'gray' },
+      { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900', id: 'black' },
+    ];
+
+    const sizes = [
+      { name: 'XXS', inStock: true,id:'xxs' },
+      { name: 'XS', inStock: true,id:'xs'  },
+      { name: 'S', inStock: true,id:'s'  },
+      { name: 'M', inStock: true,id:'m'  },
+      { name: 'L', inStock: true,id:'l'  },
+      { name: 'XL', inStock: true ,id:'xl' },
+      { name: '2XL', inStock: true,id:'2xl'  },
+      { name: '3XL', inStock: true ,id:'3xl' },
+    ]
+
+
+
 //console.log("id"+params.id);
     useEffect(()=>{
       if(params.id){
@@ -65,18 +86,23 @@ function ProductForm() {
         noValidate
         onSubmit={handleSubmit((data) => {
             // add product
-            //console.log(data);
+          // console.log(data);
             const product = {...data}
-            product.images=[product.thumbnail,product.image1,product.image2,product.image3]
+           // console.log(product.thumbnail);
+            product. thumbnail=product.thumbnail
+            product.images=[product.image1,product.image2,product.image3]
             product.rating=0;
-            delete product['thumbnail'];
+            product.colors = product.colors.map(color=>colors.find(clr=>clr.id===color));
+            product.sizes = product.sizes.map(size=>sizes.find(sz=>sz.id===size));
+
+          //  delete product['thumbnail'];
             delete product['image1'];
             delete product['image2'];
             delete product['image3'];
             product.price=+product.price;
             product.discountPercentage=+product.discountPercentage;
             product.stock=+product.stock;
-
+            //return
           if(params.id){
             product.id=params.id;
             product.rating=SelectedProduct.rating || 0;
@@ -155,6 +181,42 @@ function ProductForm() {
                 </select>
                 </div>
               </div>
+
+              
+              <div className="col-span-full">
+                <label htmlFor="colors" className="block text-sm font-medium leading-6 text-gray-900">
+                  Colors
+                </label>
+                <div className="mt-2">
+             
+                    {colors.map((color)=>(
+                      <>
+                    <input type='checkbox'   {...register('colors',{
+                      })}
+                    key={color.id}
+                    value={color.id}/> {color.name}
+                </>
+                    ))}
+                </div>
+              </div>
+
+
+              <div className="col-span-full">
+                <label htmlFor="sizes" className="block text-sm font-medium leading-6 text-gray-900">
+                  Sizes
+                </label>
+                <div className="mt-2">
+                    {sizes.map((size)=>(
+                      <>
+                    <input type='checkbox'   {...register('sizes',{
+                      })}
+                    key={size.id}
+                    value={size.id}/> {size.name}
+                </>
+                    ))}
+                </div>
+              </div>
+
 
 
               <div className="col-span-full">
