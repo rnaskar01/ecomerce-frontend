@@ -70,6 +70,15 @@ function ProductForm() {
         setValue('image2', SelectedProduct.images[1]);
         setValue('image3', SelectedProduct.images[2]);
 
+        setValue('highlight1', SelectedProduct.highlights[0]);
+        setValue('highlight2', SelectedProduct.highlights[1]);
+        setValue('highlight3', SelectedProduct.highlights[2]);
+        setValue('highlight4', SelectedProduct.highlights[3]);
+        setValue('sizes', SelectedProduct.sizes.map(size=>size.id));
+        setValue('colors', SelectedProduct.colors.map(color=>color.id));
+
+
+
       }
     },[SelectedProduct,setValue])
 
@@ -85,12 +94,11 @@ function ProductForm() {
         <form 
         noValidate
         onSubmit={handleSubmit((data) => {
-            // add product
-          // console.log(data);
             const product = {...data}
-           // console.log(product.thumbnail);
             product. thumbnail=product.thumbnail
             product.images=[product.image1,product.image2,product.image3]
+            product.highlights=[product.highlight1,product.highlight2,product.highlight3,product.highlight4]
+
             product.rating=0;
             product.colors = product.colors.map(color=>colors.find(clr=>clr.id===color));
             product.sizes = product.sizes.map(size=>sizes.find(sz=>sz.id===size));
@@ -373,6 +381,78 @@ function ProductForm() {
                   </div>
                 </div>
               </div>
+
+
+              <div className="sm:col-span-2">
+                <label htmlFor="highlight1" className="block text-sm font-medium leading-6 text-gray-900">
+                  Highlight 1
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                    <input
+                      type="text"
+                      {...register('highlight1',{
+                      })}                       
+                      id="highlight1"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+              </div>
+
+
+              <div className="sm:col-span-2">
+                <label htmlFor="highlight2" className="block text-sm font-medium leading-6 text-gray-900">
+                  Highlight 2
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                    <input
+                      type="text"
+                      {...register('highlight2',{
+                      })}                       
+                      id="highlight2"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="sm:col-span-2">
+                <label htmlFor="highlight3" className="block text-sm font-medium leading-6 text-gray-900">
+                  Highlight 3
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                    <input
+                      type="text"
+                      {...register('highlight3',{
+                      })}                       
+                      id="highlight3"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+              </div>
+
+
+              <div className="sm:col-span-2">
+                <label htmlFor="highlight4" className="block text-sm font-medium leading-6 text-gray-900">
+                  Highlight 4
+                </label>
+                <div className="mt-2">
+                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600">
+                    <input
+                      type="text"
+                      {...register('highlight4',{
+                      })}                       
+                      id="highlight4"
+                      className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+                    />
+                  </div>
+                </div>
+              </div>
+
           </div>
   
           <div className="border-b border-gray-900/10 pb-12">
