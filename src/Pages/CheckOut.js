@@ -12,15 +12,16 @@ import {
 } from "../features/cart/CartSlice";
 import { Navigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { selectcurrentorder } from "../features/order/orderSlice";
+import { selectStatus, selectcurrentorder } from "../features/order/orderSlice";
 import { selectLoggedInUser } from "../features/auth/authslice";
 import { createOrderAsync } from "../features/order/orderSlice";
 import { selectUserInfo } from "../features/user/userSlice";
-import { discountedPrice } from "../app/constant";
 import { updateUserAsync } from "../features/user/userSlice";
+import { RevolvingDot } from "react-loader-spinner";
 function Checkout() {
   const [open, setOpen] = useState(true);
   const items = useSelector(selectItems);
+  const status = useSelector(selectStatus) 
   const dispatch = useDispatch();
   const {
     register,
@@ -32,7 +33,7 @@ function Checkout() {
   const user = useSelector(selectUserInfo);
   const currentorder = useSelector(selectcurrentorder);
   const totalAmount = items.reduce(
-    (amount, item) => discountedPrice(item.product) * item.quantity + amount,
+    (amount, item) => (item.product.discountPrice) * item.quantity + amount,
     0
   );
   const totalItems = items.reduce((total, item) => item.quantity + total, 0);
@@ -48,16 +49,17 @@ function Checkout() {
   };
 
   const handleAddress = (e) => {
-    //console.log(e.target.value);
+    //(e.target.value);
     setselectedAddress(user.addresses[e.target.value]);
   };
 
   const handlePayment = (e) => {
-    //console.log(e.target.value);
+    //(e.target.value);
     setpaymentmethod(e.target.value);
   };
 
   const handleOrder = (e) => {
+    if(selectedAddress && paymentmethod){
     const order = {
       items,
       totalItems,
@@ -69,9 +71,12 @@ function Checkout() {
       status: "pending", // other status can be delivered,received
     };
     dispatch(createOrderAsync(order));
-    //ToDo: Redirect to the Order Success page
-    //ToDo: clear the cart after the order
-    //ToDo: on server change the stock number of items
+  }else{
+    alert('Enter Address and Payment method')
+  }
+    //: Redirect to the Order Success page
+    //: clear the cart after the order
+    //: on server change the stock number of items
   };
   return (
     <>
@@ -83,14 +88,18 @@ function Checkout() {
         ></Navigate>
       )}
 
-{/* {currentorder && currentorder.paymentmethod==='Card' && (
-        <Navigate
-          to={`/stripe-checkout/`}
-          replace={true}
-        ></Navigate>
-      )} */}
-
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+{status === 'loading' ? (
+            <RevolvingDot
+            position="center" 
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="revolving-dot-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            />
+          ): <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-5">
           <div className="lg:col-span-3">
             {/*This form is for address*/}
@@ -98,7 +107,7 @@ function Checkout() {
               className="bg-white px-5 py-12 mt-12"
               noValidate
               onSubmit={handleSubmit((data) => {
-                // console.log(data);
+                // (data);
                 dispatch(
                   updateUserAsync({
                     ...user,
@@ -392,7 +401,7 @@ function Checkout() {
                                   {item.product.title}
                                 </a>
                               </h3>
-                              <p className="ml-4">₹ {discountedPrice(item.product)}</p>
+                              <p className="ml-4">₹ {item.product.discountPrice}</p>
                             </div>
                             <p className="mt-1 text-sm text-gray-500">
                               {item.product.brand}
@@ -474,7 +483,7 @@ function Checkout() {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
     </>
   );
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constant";
+import { ITEMS_PER_PAGE } from "../../../app/constant";
 import { useDispatch, useSelector } from "react-redux";
 import {
   UpdateOrderAsync,
@@ -19,7 +19,7 @@ function AdminOrders() {
 
   const totalOrders = useSelector(selectTotalOrders);
   const [editableOrderId, setEditableOrderId] = useState(-1);
-   //console.log("orders"+totalOrders);
+   //("orders"+totalOrders);
 
   // useEffect(()=>{
   //   dispatch(fetchAllOrdersAsync())
@@ -45,7 +45,7 @@ function AdminOrders() {
   };
 
   const handleShow = () => {
-    //console.log("handleShow");
+    //("handleShow");
   };
 
   const handleUpdate = (e, order) => {
@@ -146,7 +146,7 @@ function AdminOrders() {
                             </div>
                             <span>
                               {item.product.title}-#{item.quantity}-
-                              {discountedPrice(item.product)}
+                              {item.product.discountPrice}
                               </span>
                           </div>
                         ))}

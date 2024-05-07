@@ -26,13 +26,13 @@ import {
   Squares2X2Icon,
 } from "@heroicons/react/20/solid";
 import { Link } from "react-router-dom";
-import { ITEMS_PER_PAGE, discountedPrice } from "../../../app/constant";
+import { ITEMS_PER_PAGE } from "../../../app/constant";
 import Pagination from "../../common/Pagination";
 import { RevolvingDot } from 'react-loader-spinner';
 const sortOptions = [
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
-  { name: "Price: Low to High", sort: "price", order: "asc", current: false },
-  { name: "Price: High to Low", sort: "price", order: "desc", current: false },
+  { name: "Price: Low to High", sort: "discountPrice", order: "asc", current: false },
+  { name: "Price: High to Low", sort: "discountPrice", order: "desc", current: false },
 ];
 
 function classNames(...classes) {
@@ -48,7 +48,7 @@ export default function ProductList() {
   const categories = useSelector(selectCategories);
   const status = useSelector(selectProductListStatus)
   const totalItems = useSelector(selectTotalItems);
-//console.log(products);
+//(products);
   //const totalItems =30;
   const filters = [
     {
@@ -70,9 +70,8 @@ export default function ProductList() {
   //const productsArray=products.products;
 
   const handleFilter = (e, section, option) => {
-    //console.log(e.target.checked);
+    //(e.target.checked);
     const newFilter = { ...filter };
-    //ToDo: on server it will support multiple categories
     if (e.target.checked) {
       if (newFilter[section.id]) {
         newFilter[section.id].push(option.value);
@@ -85,27 +84,27 @@ export default function ProductList() {
       );
       newFilter[section.id].splice(index, 1);
     }
-    //console.log({ newFilter });
+    //({ newFilter });
     setFilter(newFilter);
   };
 
   const handleSort = (e, option) => {
 
     const sort = { _sort: option.sort,_order: option.order};
-    //console.log("sort"+sort);
+    //("sort"+sort);
     setSort(sort);
   };
   const handlePage = (page) => {
-    //console.log({ page });
+    //({ page });
     setPage(page);
   };
 
   useEffect(() => {
 
     const pagination = { _page: page,_limit:ITEMS_PER_PAGE };
-    //console.log("hello"+pagination);
+    //("hello"+pagination);
     dispatch(fetchProductsByFiltersAsync({ filter, sort, pagination }));
-    //ToDo: server will filter Deleted product
+    //: server will filter Deleted product
   }, [dispatch, filter, sort, page]);
   
 
@@ -471,7 +470,7 @@ function ProductGrid({ products,status }) {
                     </div>
                     <div>
                       <p className="text-sm font-medium text-gray-900">
-                        ₹{discountedPrice(product)}
+                        ₹{(product.discountPrice)}
                       </p>
                       <p className="text-sm font-medium line-through text-gray-400">
                         {" "}

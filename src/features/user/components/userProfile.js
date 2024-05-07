@@ -10,9 +10,9 @@ export default function UserProfile() {
   const [selectedEditIndex,setSelectedEditIndex]=useState(-1)
   const [showAddAddressForm,setShowAddAddressForm]=useState(false)
 
-  //console.log(user.addresses);
+  //(user.addresses);
 
-  // ToDO: we will add payment section when we work on backend
+  // : we will add payment section when we work on backend
 
   const {
     register,
@@ -81,7 +81,7 @@ type="submit" className="rounded-md my-5 bg-green-600 px-3 py-2 text-sm font-sem
               className="bg-white px-5 py-12 mt-12"
               noValidate
               onSubmit={handleSubmit((data) => {
-                // console.log(data);
+                // (data);
                 handleAdd(data)
                 reset();
               })}
@@ -256,7 +256,7 @@ type="submit" className="rounded-md my-5 bg-green-600 px-3 py-2 text-sm font-sem
               className="bg-white px-5 py-12 mt-12"
               noValidate
               onSubmit={handleSubmit((data) => {
-                // console.log(data);
+                // (data);
                 handleEdit(data,index)
                 reset();
               })}

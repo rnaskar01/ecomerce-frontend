@@ -17,5 +17,5 @@ const products =  [{"id":1,
 
    const brands = [...new Set([...products.map(p=>p.brand)])]
 
-   console.log(brands.map(c=>({value:c,label:c.split('-').join(' '),checked:false})));
+   (brands.map(c=>({value:c,label:c.split('-').join(' '),checked:false})));
 

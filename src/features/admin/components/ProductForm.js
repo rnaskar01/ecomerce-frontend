@@ -42,7 +42,7 @@ function ProductForm() {
 
 
 
-//console.log("id"+params.id);
+//("id"+params.id);
     useEffect(()=>{
       if(params.id){
         dispatch(fetchProductsByIdAsync(params.id));
@@ -52,7 +52,7 @@ function ProductForm() {
     },[params.id,dispatch])
 
 
-   // console.log(SelectedProduct);
+   // (SelectedProduct);
 
     const SelectedProduct = useSelector(selectProductById)
 
@@ -88,7 +88,7 @@ function ProductForm() {
       dispatch(updateProductAsync(product));
     }
 
-    //console.log(SelectedProduct);
+    //(SelectedProduct);
     return ( 
       <>
         <form 
@@ -123,10 +123,10 @@ function ProductForm() {
             dispatch(createProductAsync(product));
             alert.success('Product Created')
             reset();
-        // ToDo: on product succefully added clear the field and show a message
+        // : on product succefully added clear the field and show a message
 
           }
-            //console.log(product);
+            //(product);
         })}>
         <div className="space-y-12 bg-white p-12">
           <div className="border-b border-gray-900/10 pb-12">

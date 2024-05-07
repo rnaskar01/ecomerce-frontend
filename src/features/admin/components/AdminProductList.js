@@ -31,8 +31,8 @@ import Pagination from "../../common/Pagination";
 
 const sortOptions = [
   { name: "Best Rating", sort: "rating", order: "desc", current: false },
-  { name: "Price: Low to High", sort: "price", order: "asc", current: false },
-  { name: "Price: High to Low", sort: "price", order: "desc", current: false },
+  { name: "Price: Low to High", sort: "discountPrice", order: "asc", current: false },
+  { name: "Price: High to Low", sort: "discountPrice", order: "desc", current: false },
 ];
 
 
@@ -46,7 +46,7 @@ export default function AdminProductList() {
   const products = useSelector(selectAllproducts);
   const brands = useSelector(selectBrands);
   const categories = useSelector(selectCategories);
- // console.log(products);
+ // (products);
 
   //const totalItems = useSelector(selecttotalItems);
   const filters = [
@@ -67,9 +67,8 @@ export default function AdminProductList() {
   const [page, setPage] = useState(1);
 
   const handleFilter = (e, section, option) => {
-    // console.log(e.target.checked);
+    // (e.target.checked);
     const newFilter = { ...filter };
-    //ToDo: on server it will support multiple categories
     if (e.target.checked) {
       if (newFilter[section.id]) {
         newFilter[section.id].push(option.value);
@@ -82,18 +81,18 @@ export default function AdminProductList() {
       );
       newFilter[section.id].splice(index, 1);
     }
-    console.log({ newFilter });
+   // ({ newFilter });
     setFilter(newFilter);
   };
 
   const handleSort = (e, option) => {
     const sort = { _sort: option.sort, _order: option.order };
-    console.log(sort);
+    //(sort);
 
     setSort(sort);
   };
   const handlePage = (page) => {
-    console.log({ page });
+    //({ page });
     setPage(page);
   };
 
@@ -453,9 +452,7 @@ function ProductGrid({ products }) {
                     <div>
                       <p className="text-sm font-medium text-gray-900">
                         ₹
-                        {Math.round(
-                          product.price * (1 - product.discountPercentage / 100)
-                        )}
+                        {product.discountPrice}
                       </p>
                       <p className="text-sm font-medium line-through text-gray-400">
                         {" "}

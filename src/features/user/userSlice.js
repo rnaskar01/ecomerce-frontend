@@ -73,7 +73,7 @@ export const userSlice = createSlice({
   },
 });
 
-// ToDo: change orders and address to be independent of users;
+// : change orders and address to be independent of users;
 export const selectUserOrders = (state) => state.user.userInfo.orders;
 export const selectUserInfo = (state) => state.user.userInfo;
 export const selectUserInfoStatus = (state) => state.user.status;

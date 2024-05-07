@@ -7,17 +7,10 @@ import { selectProductById, selectProductListStatus } from '../Product-Slice';
 import { addTocartAsync, selectItems } from '../../cart/CartSlice';
 import { selectLoggedInUser } from '../../auth/authslice';
 import { fetchProductsByIdAsync } from '../Product-Slice';
-import { discountedPrice } from '../../../app/constant';
 import { useAlert } from "react-alert";
 import { RevolvingDot } from 'react-loader-spinner';
 
 
-const highlights = [
-  'Hand cut and sewn locally',
-  'Dyed with our proprietary colors',
-  'Pre-washed & pre-shrunk',
-  'Ultra-soft 100% cotton',
-]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -35,7 +28,7 @@ export default function ProductDetails() {
   const params = useParams();
   const alert = useAlert();
 
-  console.log(product);
+ // (product);
 
   const handleCart = (e)=>{
     e.preventDefault();
@@ -47,9 +40,7 @@ export default function ProductDetails() {
       if(selectedSize){
         newItem.size=selectedSize
       }
-      dispatch(addTocartAsync(newItem))
-      // ToDo: it will be based on server responce of backend
-      alert.success("Item added Successfully");
+      dispatch(addTocartAsync({item:newItem,alert}))
 
     }
     else alert.error("Item already added");
@@ -147,7 +138,7 @@ export default function ProductDetails() {
           {/* Options */}
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
-            <p className="text-3xl tracking-tight text-gray-900">₹ {discountedPrice(product)}</p>
+            <p className="text-3xl tracking-tight text-gray-900">₹ {product.discountPrice}</p>
             <p className="text-3xl tracking-tight text-gray-900">₹ {product.price}</p>
 
 

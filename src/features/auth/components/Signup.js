@@ -16,7 +16,6 @@ export default function SignUp() {
   } = useForm();
   //const user = useSelector(selectLoggedInUser)
 
-  console.log(errors);
   return (
     <div>
       <>
@@ -39,8 +38,8 @@ export default function SignUp() {
               className="space-y-6"
               onSubmit={handleSubmit((data) => {
                 dispatch(createUserAsync({email:data.email,password:data.password,addresses:[],role:'user'}))
-                // ToDO: this role can be directly given on backend
-               // console.log(data);
+                // : this role can be directly given on backend
+               // (data);
               })}
             >
               <div>

@@ -3,34 +3,13 @@ import { StarIcon } from '@heroicons/react/20/solid'
 import { RadioGroup } from '@headlessui/react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { selectProductById,fetchProductsByIdAsync } from '../../Product/Product-Slice';
-import { addTocartAsync } from '../../cart/CartSlice';
-import { discountedPrice } from '../../../app/constant';
+import { selectProductById, selectProductListStatus,fetchProductsByIdAsync } from '../../Product/Product-Slice';
+import { addTocartAsync, selectItems } from '../../cart/CartSlice';
+import { selectLoggedInUser } from '../../auth/authslice';
+import { useAlert } from "react-alert";
+import { RevolvingDot } from 'react-loader-spinner';
 
-// ToDo : In server we will add color,size and highlight
 
-const colors =  [
-  { name: 'White', class: 'bg-white', selectedClass: 'ring-gray-400' },
-  { name: 'Gray', class: 'bg-gray-200', selectedClass: 'ring-gray-400' },
-  { name: 'Black', class: 'bg-gray-900', selectedClass: 'ring-gray-900' },
-];
-const sizes = [
-  { name: 'XXS', inStock: false },
-  { name: 'XS', inStock: true },
-  { name: 'S', inStock: true },
-  { name: 'M', inStock: true },
-  { name: 'L', inStock: true },
-  { name: 'XL', inStock: true },
-  { name: '2XL', inStock: true },
-  { name: '3XL', inStock: true },
-]
-
-const highlights = [
-  'Hand cut and sewn locally',
-  'Dyed with our proprietary colors',
-  'Pre-washed & pre-shrunk',
-  'Ultra-soft 100% cotton',
-]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -39,17 +18,35 @@ function classNames(...classes) {
 
 
 export default function AdminProductDetails() {
-  const [selectedColor, setSelectedColor] = useState(colors[0])
-  const [selectedSize, setSelectedSize] = useState(sizes[2])
+  const [selectedColor, setSelectedColor] = useState()
+  const [selectedSize, setSelectedSize] = useState()
+  const items = useSelector(selectItems)
   const product = useSelector(selectProductById)
   const dispatch = useDispatch();
+  const status = useSelector(selectProductListStatus)
   const params = useParams();
+  const alert = useAlert();
+
+ // (product);
 
   const handleCart = (e)=>{
     e.preventDefault();
-    const newItem = {...product,quantity:1}
-    delete newItem['id']
-    dispatch(addTocartAsync(newItem))
+    if(items.findIndex(item=>item.product.id===product.id)<0){
+      const newItem = {product:product.id,quantity:1 }
+      if(selectedColor){
+        newItem.color=selectedColor
+      }
+      if(selectedSize){
+        newItem.size=selectedSize
+      }
+      dispatch(addTocartAsync(newItem))
+      // : it will be based on server responce of backend
+      alert.success("Item added Successfully");
+
+    }
+    else alert.error("Item already added");
+
+  
   }
 
   useEffect(()=>{
@@ -57,6 +54,18 @@ export default function AdminProductDetails() {
   },[dispatch,params.id])
   return (
     <div className="bg-white">
+      {status === 'loading' ? (
+            <RevolvingDot
+            position="center" 
+            visible={true}
+            height="80"
+            width="80"
+            color="#4fa94d"
+            ariaLabel="revolving-dot-loading"
+            wrapperStyle={{}}
+            wrapperClass=""
+            />
+          ) : null}
     {product && <div className="pt-6">
         <nav aria-label="Breadcrumb">
           <ol role="list" className="mx-auto flex max-w-2xl items-center space-x-2 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
@@ -130,8 +139,9 @@ export default function AdminProductDetails() {
           {/* Options */}
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
-            <p className="text-xl line-through tracking-tight text-gray-900">₹ {product.price}</p>
-            <p className="text-3xl tracking-tight text-gray-900">₹ {discountedPrice(product)}</p>
+            <p className="text-3xl tracking-tight text-gray-900">₹ {product.discountPrice}</p>
+            <p className="text-3xl tracking-tight text-gray-900">₹ {product.price}</p>
+
 
             {/* Reviews */}
             <div className="mt-6">
@@ -154,15 +164,15 @@ export default function AdminProductDetails() {
               </div>
             </div>
 
-            <form className="mt-10">
+          <form className="mt-10">
               {/* Colors */}
-              <div>
+              { product.colors && product.colors.length>0 && <div>
                 <h3 className="text-sm font-medium text-gray-900">Color</h3>
 
                 <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-4">
                   <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
                   <div className="flex items-center space-x-3">
-                    {colors.map((color) => (
+                    {product.colors.map((color) => (
                       <RadioGroup.Option
                         key={color.name}
                         value={color}
@@ -189,10 +199,10 @@ export default function AdminProductDetails() {
                     ))}
                   </div>
                 </RadioGroup>
-              </div>
+              </div>}
 
               {/* Sizes */}
-              <div className="mt-10">
+              { product.sizes && product.sizes.length>0 && <div className="mt-10">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-medium text-gray-900">Size</h3>
                   <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
@@ -203,7 +213,7 @@ export default function AdminProductDetails() {
                 <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-4">
                   <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
                   <div className="grid grid-cols-4 gap-4 sm:grid-cols-8 lg:grid-cols-4">
-                    {sizes.map((size) => (
+                    {product.sizes.map((size) => (
                       <RadioGroup.Option
                         key={size.name}
                         value={size}
@@ -251,7 +261,7 @@ export default function AdminProductDetails() {
                     ))}
                   </div>
                 </RadioGroup>
-              </div>
+              </div>}
 
               <button
               onClick={handleCart}
@@ -260,6 +270,7 @@ export default function AdminProductDetails() {
               >
                 Add to Cart
               </button>
+ 
             </form>
           </div>
 
@@ -273,19 +284,19 @@ export default function AdminProductDetails() {
               </div>
             </div>
 
-            <div className="mt-10">
+           {product.highlights && <div className="mt-10">
               <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
 
               <div className="mt-4">
                 <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                  {highlights.map((highlight) => (
+                  {product.highlights.map((highlight) => (
                     <li key={highlight} className="text-gray-400">
                       <span className="text-gray-600">{highlight}</span>
                     </li>
                   ))}
                 </ul>
               </div>
-            </div>
+            </div>}
 
             <div className="mt-10">
               <h2 className="text-sm font-medium text-gray-900">Details</h2>
